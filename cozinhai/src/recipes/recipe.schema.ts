@@ -18,6 +18,7 @@ export class Recipe {
                 date: Date,
                 comment: String,
                 grade: Number,
+                imageBase64: String,
             },
         ],
         default: [],
@@ -27,6 +28,7 @@ export class Recipe {
         date: Date;
         comment?: string;
         grade: number;
+        imageBase64: string;
     }[];
 }
 

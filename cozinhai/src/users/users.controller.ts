@@ -103,7 +103,15 @@ export class UsersController {
         @Param('id') id: string,
         @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
         @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
-    ): Promise<{ recipeId: string; title: string }[]> {
+    ): Promise<{ 
+        recipeId: string; 
+        title: string;
+        recipeImage: string;
+        date: Date;
+        comment?: string;
+        grade: number;
+        imageBase64: string;
+    }[]> {
         return await this.UsersService.listUserReviews(id, limit, offset);
     }
 

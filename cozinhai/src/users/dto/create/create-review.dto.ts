@@ -39,4 +39,8 @@ export class CreateReviewDto {
         message: 'Comentário deve ter no máximo 1000 caracteres',
     })
     comment?: string;
+
+    @IsOptional()
+    @IsString({ message: 'A imagem Base64 deve ser uma string' })
+    imageBase64?: string;
 }

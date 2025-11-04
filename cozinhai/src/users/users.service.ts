@@ -21,7 +21,7 @@ export class UsersService {
         private userModel: Model<UserDocument>,
         @InjectModel(Recipe.name)
         private recipeModel: Model<RecipeDocument>,
-    ) {}
+    ) { }
 
     async findOneByEmail(email: string): Promise<UserDocument | null> {
         return this.userModel.findOne({ email }).exec();
@@ -183,18 +183,19 @@ export class UsersService {
             date: new Date(),
             comment: createReviewDto.comment ?? '',
             grade: finalGrade,
+            imageBase64: createReviewDto.imageBase64 ?? '',
         };
 
         if (existingReview) {
             user.reviewRecipes = user.reviewRecipes.map((review) =>
                 review.recipeId === recipeId
                     ? {
-                          ...review,
-                          ...reviewData,
-                          title: createReviewDto.title ?? review.title,
-                          recipeImage:
-                              createReviewDto.recipeImage ?? review.recipeImage,
-                      }
+                        ...review,
+                        ...reviewData,
+                        title: createReviewDto.title ?? review.title,
+                        recipeImage:
+                            createReviewDto.recipeImage ?? review.recipeImage,
+                    }
                     : review,
             );
         } else {

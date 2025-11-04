@@ -17,7 +17,7 @@ export class RecipesService {
         recipeId: string,
         limit: number,
         offset: number,
-    ): Promise<{ date: Date; comment: string; grade: number }[]> {
+    ): Promise<{ date: Date; comment: string; grade: number; imageBase64: string }[]> {
         const recipe = await this.recipeModel.findOne({ recipeId });
 
         if (!recipe) {
@@ -36,6 +36,7 @@ export class RecipesService {
                     comment: review.comment ?? '',
                     grade: review.grade,
                     userId: review.userId,
+                    imageBase64: review.imageBase64 ?? '',
                 });
             }
         }

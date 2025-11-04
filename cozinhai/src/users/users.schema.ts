@@ -50,6 +50,7 @@ export class User {
                     min: 1,
                     max: 5,
                 },
+                imageBase64: String,
             },
         ],
         default: [],
@@ -61,6 +62,7 @@ export class User {
         date: Date;
         comment?: string;
         grade: number;
+        imageBase64: string;
     }[];
 
     @Prop({ required: true, default: true })
