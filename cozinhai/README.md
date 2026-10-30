@@ -45,7 +45,13 @@ Consulte o resumo em `GET /recipe/:recipeId/review-summary`. A resposta inclui:
 - `summary`: texto salvo ou `null`;
 - `reviewCount`: quantidade de comentários usada no resumo salvo;
 - `pendingReviewCount`: marco pendente, quando a geração falhou;
-- `generatedAt`: data da última geração ou `null`.
+- `generatedAt`: data da última geração ou `null`;
+- `averageRating`: média das notas de usuários ativos, arredondada para uma
+  casa decimal, ou `null` quando não houver avaliações;
+- `ratingCount`: quantidade de notas incluídas na média.
+
+O frontend pode usar `averageRating` para preencher estrelas e exibir a nota
+média; `ratingCount` informa quantas avaliações foram consideradas.
 
 ## Project setup
 

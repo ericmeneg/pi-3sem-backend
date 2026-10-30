@@ -39,7 +39,9 @@ describe('ReviewSummaryService', () => {
         userModel = {
             find: jest.fn().mockReturnValue({
                 select: jest.fn().mockReturnValue({
-                    exec: jest.fn().mockResolvedValue(activeUsers),
+                    exec: jest
+                        .fn()
+                        .mockImplementation(() => Promise.resolve(activeUsers)),
                 }),
             }),
         } as unknown as typeof userModel;
@@ -102,6 +104,32 @@ describe('ReviewSummaryService', () => {
             reviewCount: 5,
             pendingReviewCount: 10,
             generatedAt: null,
+            averageRating: 5,
+            ratingCount: 5,
+        });
+    });
+
+    it('returns the average active rating rounded to one decimal place', async () => {
+        recipe.reviews[0].grade = 5;
+        recipe.reviews[1].grade = 4;
+        recipe.reviews[2].grade = 4;
+        recipe.reviews[3].grade = 4;
+        recipe.reviews[4].grade = 1;
+        activeUsers = activeUsers.slice(0, 4);
+
+        await expect(service.getSummary('recipe-1')).resolves.toMatchObject({
+            averageRating: 4.3,
+            ratingCount: 4,
+        });
+    });
+
+    it('returns a null average when there are no active ratings', async () => {
+        recipe.reviews = [];
+        activeUsers = [];
+
+        await expect(service.getSummary('recipe-1')).resolves.toMatchObject({
+            averageRating: null,
+            ratingCount: 0,
         });
     });
 

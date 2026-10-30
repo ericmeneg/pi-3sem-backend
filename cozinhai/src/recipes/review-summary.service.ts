@@ -24,6 +24,8 @@ export interface RecipeReviewSummary {
     reviewCount: number;
     pendingReviewCount: number | null;
     generatedAt: Date | null;
+    averageRating: number | null;
+    ratingCount: number;
 }
 
 @Injectable()
@@ -44,6 +46,26 @@ export class ReviewSummaryService {
             throw new NotFoundException('Receita não encontrada');
         }
 
+        const userIds = recipe.reviews.map((review) => review.userId);
+        const activeUsers = await this.userModel
+            .find({ _id: { $in: userIds }, status: true })
+            .select('_id')
+            .exec();
+        const activeUserIds = new Set(
+            activeUsers.map((user) => user._id.toString()),
+        );
+        const activeGrades = recipe.reviews
+            .filter((review) => activeUserIds.has(review.userId))
+            .map((review) => review.grade);
+        const averageRating =
+            activeGrades.length > 0
+                ? Math.round(
+                      (activeGrades.reduce((sum, grade) => sum + grade, 0) /
+                          activeGrades.length) *
+                          10,
+                  ) / 10
+                : null;
+
         const status =
             typeof recipe.reviewSummaryPendingCount === 'number'
                 ? 'pending'
@@ -57,6 +79,8 @@ export class ReviewSummaryService {
             reviewCount: recipe.reviewSummaryReviewCount ?? 0,
             pendingReviewCount: recipe.reviewSummaryPendingCount ?? null,
             generatedAt: recipe.reviewSummaryUpdatedAt ?? null,
+            averageRating,
+            ratingCount: activeGrades.length,
         };
     }
 
