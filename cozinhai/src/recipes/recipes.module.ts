@@ -4,6 +4,7 @@ import { RecipesService } from './recipes.service';
 import { RecipesController } from './recipes.controller';
 import { Recipe, RecipesSchema } from './recipe.schema';
 import { UsersModule } from '../users/users.module';
+import { ReviewSummaryService } from './review-summary.service';
 
 @Module({
     imports: [
@@ -13,7 +14,7 @@ import { UsersModule } from '../users/users.module';
         forwardRef(() => UsersModule), // 👈 aqui
     ],
     controllers: [RecipesController],
-    providers: [RecipesService],
-    exports: [MongooseModule],
+    providers: [RecipesService, ReviewSummaryService],
+    exports: [MongooseModule, ReviewSummaryService],
 })
 export class RecipesModule {}

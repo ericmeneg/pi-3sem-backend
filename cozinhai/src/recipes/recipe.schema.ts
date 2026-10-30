@@ -30,6 +30,18 @@ export class Recipe {
         grade: number;
         imageBase64: string;
     }[];
+
+    @Prop({ type: String, default: null })
+    reviewSummary!: string | null;
+
+    @Prop({ type: Number, default: 0 })
+    reviewSummaryReviewCount!: number;
+
+    @Prop({ type: Date, default: null })
+    reviewSummaryUpdatedAt!: Date | null;
+
+    @Prop({ type: Number, default: null })
+    reviewSummaryPendingCount!: number | null;
 }
 
 export const RecipesSchema = SchemaFactory.createForClass(Recipe);

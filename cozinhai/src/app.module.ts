@@ -17,6 +17,8 @@ import { AuthModule } from './auth/auth.module';
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => ({
                 uri: configService.getOrThrow<string>('MONGO_URI'),
+                family: 4,
+                serverSelectionTimeoutMS: 10000,
             }),
         }),
         UsersModule,

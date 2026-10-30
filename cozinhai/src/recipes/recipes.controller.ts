@@ -7,6 +7,7 @@ import {
     Query,
 } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
+import type { RecipeReviewSummary } from './review-summary.service';
 
 @Controller('recipe')
 export class RecipesController {
@@ -28,5 +29,12 @@ export class RecipesController {
             limit,
             offset,
         );
+    }
+
+    @Get('/:recipeId/review-summary')
+    async getReviewSummary(
+        @Param('recipeId') recipeId: string,
+    ): Promise<RecipeReviewSummary> {
+        return this.recipesService.getReviewSummary(recipeId);
     }
 }

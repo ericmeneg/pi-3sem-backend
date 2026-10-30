@@ -25,6 +25,28 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Resumo de avaliações
+
+O backend gera e persiste um resumo em português quando uma receita atinge 5,
+10, 15... comentários não vazios de usuários ativos. Editar uma avaliação não
+cria um novo marco. Se a geração falhar, a avaliação continua salva, o resumo
+anterior é mantido e a geração pendente é tentada novamente na próxima avaliação
+da receita.
+
+Configure `GEMINI_API_KEY` no ambiente do backend. Opcionalmente, configure
+`GEMINI_MODEL` (padrão: `gemini-3.1-flash-lite`). Não exponha a chave no
+frontend. A disponibilidade e os limites gratuitos do Gemini dependem do modelo,
+da região e dos termos atuais do provedor; os comentários serão enviados ao
+Gemini para gerar o texto.
+
+Consulte o resumo em `GET /recipe/:recipeId/review-summary`. A resposta inclui:
+
+- `status`: `not_ready`, `pending` ou `available`;
+- `summary`: texto salvo ou `null`;
+- `reviewCount`: quantidade de comentários usada no resumo salvo;
+- `pendingReviewCount`: marco pendente, quando a geração falhou;
+- `generatedAt`: data da última geração ou `null`.
+
 ## Project setup
 
 ```bash

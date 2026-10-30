@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Recipe, RecipeDocument } from './recipe.schema';
 import { Model } from 'mongoose';
 import { User, UserDocument } from 'src/users/users.schema';
+import { ReviewSummaryService } from './review-summary.service';
+import type { RecipeReviewSummary } from './review-summary.service';
 
 @Injectable()
 export class RecipesService {
@@ -11,7 +13,12 @@ export class RecipesService {
         private readonly recipeModel: Model<RecipeDocument>,
         @InjectModel(User.name)
         private readonly userModel: Model<UserDocument>,
+        private readonly reviewSummaryService: ReviewSummaryService,
     ) {}
+
+    async getReviewSummary(recipeId: string): Promise<RecipeReviewSummary> {
+        return this.reviewSummaryService.getSummary(recipeId);
+    }
 
     async listRecipeReviews(
         recipeId: string,

@@ -16,7 +16,7 @@ async function bootstrap() {
     app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
     app.enableCors({
-        origin: process.env.CORS_ORIGIN || '*',
+        origin: '*', // Ou process.env.CORS_ORIGIN || '*'
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         allowedHeaders: 'Content-Type, Authorization',
         credentials: true,

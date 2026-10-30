@@ -13,6 +13,7 @@ import { UpdateNameDto } from './dto/update/update-name.dto';
 import { UpdatePasswordDto } from './dto/update/update-password.dto';
 import { CreateFavoritesDto } from './dto/create/create-favorites.dto';
 import { CreateReviewDto } from './dto/create/create-review.dto';
+import { ReviewSummaryService } from '../recipes/review-summary.service';
 
 @Injectable()
 export class UsersService {
@@ -21,6 +22,7 @@ export class UsersService {
         private userModel: Model<UserDocument>,
         @InjectModel(Recipe.name)
         private recipeModel: Model<RecipeDocument>,
+        private readonly reviewSummaryService: ReviewSummaryService,
     ) { }
 
     async findOneByEmail(email: string): Promise<UserDocument | null> {
@@ -159,6 +161,7 @@ export class UsersService {
         const existingReview = user.reviewRecipes.find(
             (review) => review.recipeId === recipeId,
         );
+        const isNewReview = !existingReview;
 
         if (
             !existingReview &&
@@ -214,6 +217,10 @@ export class UsersService {
 
         await user.save();
         await recipe.save();
+        await this.reviewSummaryService.updateForNewComment(
+            recipeId,
+            isNewReview && Boolean(reviewData.comment.trim()),
+        );
 
         return { user, recipe };
     }
