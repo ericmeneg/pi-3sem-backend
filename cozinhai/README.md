@@ -59,6 +59,38 @@ média; `ratingCount` informa quantas avaliações foram consideradas.
 $ npm install
 ```
 
+## Docker Compose deployment
+
+This Compose setup runs only the backend. MongoDB remains an external service
+(for example, MongoDB Atlas); no database container or database port is exposed.
+
+1. Create `.env` from `.env.example`, or add the required entries to the
+   existing `.env` without overwriting its current values.
+2. Set `MONGO_URI` to the MongoDB connection string and `JWT_SECRET` to a
+   randomly generated secret. Use at least 32 random bytes for the JWT secret.
+   Do not commit or share `.env`.
+3. Set `CORS_ORIGINS` to the frontend origin or comma-separated origins, without
+   trailing slashes. `GEMINI_API_KEY` is optional unless review summaries are
+   enabled. Keep provider keys on the backend, never in the frontend.
+4. Build and start the service:
+
+   ```bash
+   docker compose up --build -d
+   ```
+
+5. Check status and logs:
+
+   ```bash
+   docker compose ps
+   docker compose logs -f backend
+   ```
+
+The backend listens on port `3001` inside the container and is bound to
+`127.0.0.1:3001` on the host by default, suitable for a local reverse proxy or
+Cloudflare Tunnel origin. Set `HOST_PORT` in `.env` to change the host-side
+port. The root endpoint is used for the container health check. To stop the
+service, run `docker compose down`.
+
 ## Compile and run the project
 
 ```bash
