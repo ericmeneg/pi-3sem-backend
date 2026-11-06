@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as express from 'express';
+import { getCorsOrigins } from './config/cors-origins';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, {
@@ -17,12 +18,10 @@ async function bootstrap() {
     app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
     const configService = app.get(ConfigService);
-    const allowedOrigins =
-        configService
-            .get<string>('CORS_ORIGINS')
-            ?.split(',')
-            .map((origin) => origin.trim())
-            .filter(Boolean) ?? ['http://localhost:3000'];
+    const allowedOrigins = getCorsOrigins(
+        configService.get<string>('CORS_ORIGINS'),
+        configService.get<string>('CORS_ORIGIN'),
+    );
 
     app.enableCors({
         origin: allowedOrigins,

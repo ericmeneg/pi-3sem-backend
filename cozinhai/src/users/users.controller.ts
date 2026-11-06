@@ -7,7 +7,6 @@ import {
     Delete,
     Get,
     Query,
-    DefaultValuePipe,
     ParseIntPipe,
     UseGuards,
 } from '@nestjs/common';
@@ -91,8 +90,8 @@ export class UsersController {
     @UseGuards(AuthGuard)
     async listFavoriteRecipes(
         @Param('id') id: string,
-        @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-        @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
+        @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
+        @Query('offset', new ParseIntPipe({ optional: true })) offset = 0,
     ): Promise<{ recipeId: string; title: string }[]> {
         return await this.UsersService.listFavoriteRecipes(id, limit, offset);
     }
@@ -101,17 +100,19 @@ export class UsersController {
     @UseGuards(AuthGuard)
     async listUserReviews(
         @Param('id') id: string,
-        @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-        @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
-    ): Promise<{ 
-        recipeId: string; 
-        title: string;
-        recipeImage: string;
-        date: Date;
-        comment?: string;
-        grade: number;
-        imageBase64: string;
-    }[]> {
+        @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
+        @Query('offset', new ParseIntPipe({ optional: true })) offset = 0,
+    ): Promise<
+        {
+            recipeId: string;
+            title: string;
+            recipeImage: string;
+            date: Date;
+            comment?: string;
+            grade: number;
+            imageBase64: string;
+        }[]
+    > {
         return await this.UsersService.listUserReviews(id, limit, offset);
     }
 

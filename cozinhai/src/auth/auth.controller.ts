@@ -26,7 +26,7 @@ export class AuthController {
         }
 
         try {
-            this.logger.debug(`Tentativa de login para: ${body.email}`);
+            this.logger.debug('Tentativa de login.');
             const user = await this.authService.validateUser(
                 body.email,
                 body.password,
@@ -34,9 +34,9 @@ export class AuthController {
 
             if (user) {
                 this.logger.debug('Login bem sucedido');
-                const token = this.authService.login(user);
+                const { access_token } = this.authService.login(user);
                 return res.status(HttpStatus.OK).json({
-                    access_token: token,
+                    access_token,
                     user: {
                         id: user.id,
                         name: user.name,
